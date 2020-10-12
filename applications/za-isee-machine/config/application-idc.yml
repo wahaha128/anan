@@ -1,0 +1,51 @@
+spring:
+  redis:
+    database: 0
+    host: clustercfg.twn-dev-redis.7a84ec.ape1.cache.amazonaws.com
+    password: 63115712A666479602726160T476894FWBFYBYTO0YEIHMXGWMDDVSVE1v6awKa1pu6MKDALN4zTO3chfK1MHCkVfJqmw48MJ1OBIDEFFKZ320665554FYJ0If5bH22F
+    port: 6379
+    # 连接超时时间（毫秒）
+    timeout: 10000
+
+# 日志路径
+logging:
+  path: /appvol/app/isee/machine/logs/
+
+isee:
+  domain:
+    console: http://10.89.18.56:8082
+  oss:
+    enabled: true
+    ENDPOINT: http://10.89.18.56:8084/s3proxy
+    ACCESSID: id
+    ACCESSKEY: key
+    BUCKET: data
+    VIRTUAL: false
+    REGION:
+ #isee studio 业务配置
+  worker:
+    # video 录制启动脚本绝对路径
+    startCmdPath: /usr/bin/start-worker.sh
+    # video 停止录制脚本绝对路径
+    killCmdPath: /usr/bin/kill-worker.sh
+    # player标准播放地址 /index.html?iseebiz=%s&token=%s&finish=%s 固定，域名可更换，协议可更换
+    replayUrl: http://10.89.18.56:9090/index.html?iseebiz=%s&token=%s&finish=%s
+    # player手机模式播放地址 /mobile.html?iseebiz=%s&token=%s&finish=%s 固定，域名可更换，协议可更换
+    mobileReplayUrl: http://10.89.18.56:9090/mobile.html?iseebiz=%s&token=%s&finish=%s
+    # 视频录制开屏页面，一般无需配置
+    welcomePage:
+    # 最大并发数 4C8G 设置 20，其他可酌情减少
+    concurrentCont: 20
+    # 默认录制异常数据超时时间 300秒
+    defaultTimeoutSeconds: 300
+    # video 脚本录制视频存放目录，脚本中指定，这里仅标记使用，如需修改需要和脚本环境变量保持一致
+    videoPath: {视频存放地址}
+    # video 录制完成之后通知接口 配置console 地址
+    notifyUrl: http://10.89.18.56:8082/video/record/run
+    # video 录制完成业务回调接口 配置console 地址
+    callbackUrl: http://10.89.18.56:8082/video/callback
+    # 内部直播地址,配置machine的地址，采用docker镜像部署的machine才有此功能
+    #liveUrl: https://isee-studio-test.zhonganonline.com/view/$port$/?nginx=&path=ws/$port$
+    # 企业微信视频录制通知机器人地址，如果没有可以不用配置
+    #wechatWebhook: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=c696be3c-5889-476a-a23e-554bc62c6ddd
+

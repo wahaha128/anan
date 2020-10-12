@@ -1,0 +1,79 @@
+spring:
+  redis:
+    database: 0
+    host: clustercfg.twn-dev-redis.7a84ec.ape1.cache.amazonaws.com
+    password: 63115712A666479602726160T476894FWBFYBYTO0YEIHMXGWMDDVSVE1v6awKa1pu6MKDALN4zTO3chfK1MHCkVfJqmw48MJ1OBIDEFFKZ320665554FYJ0If5bH22F
+    port: 6379
+    # 连接超时时间（毫秒）
+    timeout: 10000
+# 日志路径
+logging:
+  path: /appvol/app/isee/archive/logs/
+# 归档服务配置
+archive:
+  # mongo数据库，存放归档文件信息
+  # 有密码：mongodb://root:j9xLnb82@172.28.162.228:27017/
+  # 无密码：mongodb://172.28.162.228:27017/
+  # 集群: archiveServer：mongodb://root:j9xLnb82@10.80.88.76:27017,10.80.88.77:27017/archive库?slaveOk=true&replSet={副本名称}&write=1&readPreference=secondaryPreferred&connectTimeoutMS=300000
+  # 集群: mongoServer：mongodb://root:j9xLnb82@10.80.88.76:27017,10.80.88.77:27017/record库?slaveOk=true&replSet={副本名称}&write=1&readPreference=secondaryPreferred&connectTimeoutMS=300000
+  archiveServer: mongodb://wpdocdbadmin:wpdocdbadmin.123@docdb.wealth-platform-asp.dev.aws.cloud.hsbc:27017/archive
+  # 处理归档文件间隔 毫秒
+  archiveInterval: 30000
+  #归档服务初始化配置
+  initConfig:
+    # 集合 分片个数 必须为2的指数倍 系统默认分片个数为8
+    shardCount: 8
+    # 是否采取固定集合，系统默认采用固定集合配置
+    cappedEnable: false
+    # 固定集合的字节大小配置，系统默认配置为1TB
+    # 总体需要磁盘空间为 shardCount * cappedByteSize 需要确认磁盘空间大小是否能满足配置，1099511627776
+    cappedByteSize: 1099511627776
+    # 非固定集合的数据有效时间单位秒 ，系统默认配置 14天
+    expireSeconds: 1209600
+    #archive 高性能IO配置
+  #archive 高性能IO配置
+  recordConfig:
+    # 上传失败重试次数
+    retries: 3
+    # 单次重试基础时间 毫秒
+    baseRetryBackoffMs: 1000
+    # 最大10秒重试时间 毫秒
+    maxRetryBackoffMs: 10000
+    # 进入缓冲区阻塞时间 毫秒 60秒
+    maxBlockMs: 60000
+    # 缓存区大小 字节  512MB
+    totalSizeInBytes: 536870912
+    # 单批次大小 字节 10MB
+    batchSizeThresholdInBytes: 10485760
+    # 单批次条目
+    batchCountThreshold: 512
+    # 保留10条结果
+    maxReservedAttempts: 10
+    # 5秒延迟时间
+    lingerMs: 5000
+    # 最大的使用线程数
+    ioThreadCount: 8
+  # 文件监听配置
+  beatFileConfig:
+    # collector日志文件所在目录
+    # 该配置与collector配置项isee.dir相同
+    # 确认该路径有可读可写权限，权限属于应用启动用户
+    path: /appvol/logs
+    # 查找基于path子目录深度
+    depth: 2
+    # 数据文件以什么开头
+    prefix: collector
+    # 数据文件以什么结尾
+    suffix: .log
+    # 数据文件最后修改时间以内 毫秒
+    lastModifyTimeLimit: 1440000000
+    # 文件监听时间间隔 毫秒
+    beatInterval: 10000
+  # mongo数据库配置
+  mongoConfig:
+    # mongo数据库列表
+    storeList:
+        # mongo数据库内部命名,单库不用变更
+      - store: isee_store
+        # mongo数据库地址
+        mongoServer: mongodb://wpdocdbadmin:wpdocdbadmin.123@docdb.wealth-platform-asp.dev.aws.cloud.hsbc:27017/record

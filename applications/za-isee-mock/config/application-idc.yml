@@ -1,0 +1,66 @@
+spring:
+  redis:
+    database: 0
+    host: clustercfg.twn-dev-redis.7a84ec.ape1.cache.amazonaws.com
+    password: 63115712A666479602726160T476894FWBFYBYTO0YEIHMXGWMDDVSVE1v6awKa1pu6MKDALN4zTO3chfK1MHCkVfJqmw48MJ1OBIDEFFKZ320665554FYJ0If5bH22F
+    port: 6379
+    # 连接超时时间（毫秒）
+    timeout: 10000
+  datasource:
+    url: jdbc:mysql://wp-rds-single.wealth-platform-twn.dev.aws.cloud.hsbc:3306/iseetest?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    username: admin
+    password: admin.123
+  #mock静态资源地址，同(isee.library.nas)路径对应需要指定file:协议头
+  # 确认该路径有可读可写权限，权限属于应用启动用户
+  resources:
+    static-locations: file:/appvol/resource/
+
+# 日志路径
+logging:
+  path: /appvol/app/isee/mock/logs/
+
+isee:
+  url:
+    # mock内部资源路径替换地址
+    # 这里的mock域名协议需要和console-ui、player的一致，可以通过console-ui转发，但要加路径了
+    # 和convertor里面的domain.mock保持一致
+    prefix: http://10.89.18.56:8084/api/getResource
+  library:
+    # nas存储保留
+    nas: /appvol/resource/
+    storageType: nas
+
+#mock使用的oss
+static:
+  mock:
+    oss:
+      enabled: true
+      ENDPOINT: http://10.89.18.56:8084/s3proxy
+      ACCESSID: id
+      ACCESSKEY: key
+      VIRTUAL: false
+      REGION:
+      bucketsMap:
+        #多个目录共同使用格式： 内部名称:bucket(目录),type(类型，base64:base64图片 resource:静态资源)
+        base64: data,base64
+        resource: data,resource
+
+#在没有oss的情况下mock可以提供模拟oss的服务,其他的应用使用mock提供的模拟oss服务
+s3proxy:
+  servlet:
+    #开启oss模拟服务
+    enabled: true
+  #oss模拟服务接口
+  service-path: /s3proxy
+  #oss模拟服务的地址
+  endPoint: http://10.89.18.56:8084
+  #oss模拟服务授权认证模式 none:无需授权
+  authorization: none
+#mock模拟oss的底层服务配置
+jclouds:
+  # 底层服务: filesystem:文件系统
+  provider: filesystem
+  # 文件系统目录模拟对象存储数据最终存放路径
+  # 确认该路径有可读可写权限，权限属于应用启动用户
+  filesystem:
+    basedir: /appvol/oss/

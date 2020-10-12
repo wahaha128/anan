@@ -1,0 +1,8 @@
+FROM hsbc/isee-studio:v1.2
+WORKDIR /root/app/
+COPY config /root/app/config
+COPY xjar /root/app/xjar
+COPY za-isee-machine.xjar /root/app/za-isee-machine.xjar
+COPY bin/start.sh /root/app
+EXPOSE 8003
+CMD sh start.sh
